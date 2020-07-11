@@ -1,0 +1,13 @@
+{
+    "name": "andrii/rest_book_api",
+    "type": "project",
+    "require": {
+        "php": "^7.4"
+    },
+    "authors": [
+        {
+            "name": "Andrii Dats",
+            "email": "24232842+fAtsteD@users.noreply.github.com"
+        }
+    ]
+}
