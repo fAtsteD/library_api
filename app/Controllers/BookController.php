@@ -8,6 +8,11 @@ use App\Models\Book;
 use App\Models\Edition;
 use RuntimeException;
 
+/**
+ * API controller for book
+ * 
+ * URL: /api/book
+ */
 class BookController extends ApiController
 {
     /**
@@ -37,7 +42,10 @@ class BookController extends ApiController
             ];
         }
 
-        return $this->response($response, 200);
+        return $this->response([
+            'status' => 'success',
+            'books' => $response
+        ], 200);
     }
 
     /**
