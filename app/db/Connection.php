@@ -60,7 +60,7 @@ class Connection
      */
     private function getConfig(): array
     {
-        return require __DIR__ . '/config.php';
+        return require '../config.php';
     }
 
     private function __clone()
