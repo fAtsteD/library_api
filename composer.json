@@ -9,5 +9,11 @@
             "name": "Andrii Dats",
             "email": "24232842+fAtsteD@users.noreply.github.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "app",
+            "App\\DB\\": "app/db"
+        }
+    }
 }
