@@ -15,7 +15,7 @@ abstract class ModelDB
      *
      * @var string
      */
-    protected static $tablename;
+    public static $tablename = '';
 
     /**
      * Id of object in db
@@ -36,8 +36,5 @@ abstract class ModelDB
         if (!$conn->prepare($query)->execute($this->id)) {
             throw new RuntimeException("Cannot delete data");
         }
-
-        // Data from db id deleted but object can exist. For repeated saving
-        $this->id = 0;
     }
 }
