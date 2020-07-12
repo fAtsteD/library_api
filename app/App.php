@@ -15,14 +15,14 @@ class App
      *
      * @var array
      */
-    public $requestUri = [];
+    public static $requestUri = [];
 
     /**
      * Params for action
      *
      * @var array
      */
-    public $requestParams = [];
+    public static $requestParams = [];
 
     /**
      * Action that has to be used
@@ -53,8 +53,8 @@ class App
         //$controllerName = strtolower(substr(get_called_class($this), 0, -10));
 
         // Parse Uri
-        $this->requestUri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
-        $this->requestParams = $_REQUEST;
+        self::$requestUri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+        self::$requestParams = $_REQUEST;
 
         // Define method of request
         $this->method = $_SERVER['REQUEST_METHOD'];
@@ -65,7 +65,7 @@ class App
                 $this->method = 'PUT';
             }
             else {
-                throw new Exception("Unexpected Header");
+                throw new Exception("Unexpected Header", 404);
             }
         }
     }
@@ -78,14 +78,14 @@ class App
      */
     public function run()
     {
-        if (array_shift($this->requestUri) !== 'api') {
+        if (array_shift(self::$requestUri) !== 'api') {
             throw new RuntimeException('API Not Found', 404);
         }
 
-        $controller = $this->getController(array_shift($this->requestUri));
+        $controller = $this->getController(array_shift(self::$requestUri));
 
         if ($controller === null) {
-            throw new RuntimeException('Invalid controller', 405);
+            throw new RuntimeException('Invalid controller', 404);
         }
 
         // Define action
@@ -108,7 +108,7 @@ class App
     {
         switch ($this->method) {
             case 'GET':
-                if ($this->requestUri) {
+                if (self::$requestUri) {
                     return 'viewAction';
                 } else {
                     return 'indexAction';
