@@ -11,6 +11,13 @@ use RuntimeException;
 class Book extends ModelDB
 {
     /**
+     * Name of table for model
+     *
+     * @var string
+     */
+    public static $tablename = 'book';
+
+    /**
      * Name of book. Unique
      *
      * @var string
@@ -39,18 +46,6 @@ class Book extends ModelDB
     public static $tablenameBookAuthor = 'book_author';
 
     /**
-     * Initialize data
-     *
-     * @param string $name
-     * @param Edition $edition
-     * @param array $authors
-     */
-    public function __construct()
-    {
-        self::$tablename = 'book';
-    }
-
-    /**
      * Return id of book
      *
      * @return int
@@ -75,7 +70,7 @@ class Book extends ModelDB
      *
      * @return Edition|null
      */
-    public function getEdition(): Edition
+    public function getEdition()
     {
         return Edition::findById($this->editionId);
     }
@@ -149,7 +144,7 @@ class Book extends ModelDB
         $conn = Connection::getConnection()->getPDO();
 
         // Insert/update books
-        if ($this->id === 0) {
+        if ($this->id == 0) {
             $query = "INSERT INTO " . self::$tablename . "(name,edition_id) VALUES (:name,:edition_id);";
             if (!$conn->prepare($query)->execute([':name' => $this->name, ':edition_id' => $this->editionId])) {
                 throw new RuntimeException("Cannot insert data", 404);
@@ -187,7 +182,7 @@ class Book extends ModelDB
      *
      * @return array
      */
-    static public function findAll(): array
+    static public function findAll()
     {
         $query = "SELECT * FROM " . self::$tablename . ";";
         $conn = Connection::getConnection()->getPDO();
@@ -207,7 +202,7 @@ class Book extends ModelDB
             $books[$i] = new Book();
             $books[$i]->id = $result[$i]['id'];
             $books[$i]->name = $result[$i]['name'];
-            $books[$i]->editioinId = $result[$i]['edition_id'];
+            $books[$i]->editionId = $result[$i]['edition_id'];
 
             $query = "SELECT * FROM " . self::$tablenameBookAuthor . " WHERE book_id=:book_id;";
             $conn = Connection::getConnection()->getPDO();
@@ -218,9 +213,9 @@ class Book extends ModelDB
 
             $resultBookAuthors = $conn->fetchAll();
 
-            if (empty($resultBookAuthors)) {
+            if (!empty($resultBookAuthors)) {
                 foreach ($resultBookAuthors as $authorId) {
-                    $books[$i]->authorsIds[] = $authorId['author_id'];
+                    $books[$i]->authorIds[] = $authorId['author_id'];
                 }
             }
         }
@@ -234,7 +229,7 @@ class Book extends ModelDB
      * @param int $id
      * @return Book|null
      */
-    static public function findById($id): Book
+    static public function findById($id)
     {
         $query = "SELECT * FROM " . self::$tablename . " WHERE id=:id;";
         $conn = Connection::getConnection()->getPDO();
@@ -252,7 +247,7 @@ class Book extends ModelDB
         $book = new Book();
         $book->id = $result[0]['id'];
         $book->name = $result[0]['name'];
-        $book->editioinId = $result[0]['edition_id'];
+        $book->editionId = $result[0]['edition_id'];
 
         $query = "SELECT * FROM " . self::$tablenameBookAuthor . " WHERE book_id=:book_id;";
         $conn = Connection::getConnection()->getPDO();
@@ -265,7 +260,7 @@ class Book extends ModelDB
 
         if (!empty($resultBookAuthors)) {
             foreach ($resultBookAuthors as $authorId) {
-                $book->authorsIds[] = $authorId['author_id'];
+                $book->authorIds[] = $authorId['author_id'];
             }
         }
 
@@ -278,7 +273,7 @@ class Book extends ModelDB
      * @param string $name
      * @return Book|null
      */
-    static public function findByName($name): Book
+    static public function findByName($name)
     {
         $query = "SELECT * FROM " . self::$tablename . " WHERE name=:name;";
         $conn = Connection::getConnection()->getPDO();
@@ -296,7 +291,7 @@ class Book extends ModelDB
         $book = new Book();
         $book->id = $result[0]['id'];
         $book->name = $result[0]['name'];
-        $book->editioinId = $result[0]['edition_id'];
+        $book->editionId = $result[0]['edition_id'];
 
         $query = "SELECT * FROM " . self::$tablenameBookAuthor . " WHERE book_id=:book_id;";
         $conn = Connection::getConnection()->getPDO();
@@ -309,7 +304,7 @@ class Book extends ModelDB
 
         if (!empty($resultBookAuthors)) {
             foreach ($resultBookAuthors as $authorId) {
-                $book->authorsIds[] = $authorId['author_id'];
+                $book->authorIds[] = $authorId['author_id'];
             }
         }
 
@@ -323,7 +318,7 @@ class Book extends ModelDB
      */
     private function deleteAuthors()
     {
-        $query = "DELETE FROM " . self::$tablenameBookAuthor . " WHERE book_id = :book_id";
+        $query = "DELETE FROM " . self::$tablenameBookAuthor . " WHERE book_id = :book_id;";
         $conn = Connection::getConnection()->getPDO();
         if (!$conn->prepare($query)->execute([':book_id' => $this->id])) {
             throw new RuntimeException("Cannot delete data", 404);

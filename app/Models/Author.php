@@ -11,16 +11,18 @@ use RuntimeException;
 class Author extends ModelDB
 {
     /**
+     * Name of table for model
+     *
+     * @var string
+     */
+    public static $tablename = 'author';
+
+    /**
      * Name. Unique
      *
      * @var string
      */
     protected $name = '';
-
-    public function __construct()
-    {
-        self::$tablename = 'author';
-    }
 
     /**
      * Return id of author
@@ -60,10 +62,20 @@ class Author extends ModelDB
      **/
     public function save()
     {
-        $query = "INSERT INTO " . self::$tablename . "(id,name) VALUES (:id,:name) ON DUPLICATE KEY UPDATE name = :name;";
-        $conn = Connection::getConnection()->getPDO();
-        if (!$conn->prepare($query)->execute([':id' => $this->id, ':name' => $this->name])) {
-            throw new RuntimeException("Cannot insert/update data", 404);
+        if ($this->id == 0) {
+            $query = "INSERT INTO " . self::$tablename . "(name) VALUES (:name);";
+            $conn = Connection::getConnection()->getPDO();
+            if (!$conn->prepare($query)->execute([':name' => $this->name])) {
+                throw new RuntimeException("Cannot insert data", 404);
+            }
+
+            $this->id = $conn->lastInsertId();
+        } else {
+            $query = "INSERT INTO " . self::$tablename . "(id,name) VALUES (:id,:name) ON DUPLICATE KEY UPDATE name = :name;";
+            $conn = Connection::getConnection()->getPDO();
+            if (!$conn->prepare($query)->execute([':id' => $this->id, ':name' => $this->name])) {
+                throw new RuntimeException("Cannot insert/update data", 404);
+            }
         }
     }
 
@@ -74,7 +86,7 @@ class Author extends ModelDB
     {
         parent::delete();
 
-        $query = "DELETE FROM " . Book::$tablenameBookAuthor . " WHERE author_id = :author_id";
+        $query = "DELETE FROM " . Book::$tablenameBookAuthor . " WHERE author_id = :author_id;";
         $conn = Connection::getConnection()->getPDO();
         if (!$conn->prepare($query)->execute(['author_id' => $this->id])) {
             throw new RuntimeException("Cannot delete data", 404);
@@ -86,7 +98,7 @@ class Author extends ModelDB
      *
      * @return array
      */
-    static public function findAll(): array
+    static public function findAll()
     {
         $query = "SELECT * FROM " . self::$tablename . ";";
         $conn = Connection::getConnection()->getPDO();
@@ -117,7 +129,7 @@ class Author extends ModelDB
      * @param int $id
      * @return Author|null
      */
-    static public function findById($id): Author
+    static public function findById($id)
     {
         $query = "SELECT * FROM " . self::$tablename . " WHERE id=:id;";
         $conn = Connection::getConnection()->getPDO();
@@ -145,7 +157,7 @@ class Author extends ModelDB
      * @param string $name
      * @return Author|null
      */
-    static public function findByName($name): Author
+    static public function findByName($name)
     {
         $query = "SELECT * FROM " . self::$tablename . " WHERE name=:name;";
         $conn = Connection::getConnection()->getPDO();

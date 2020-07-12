@@ -31,10 +31,10 @@ abstract class ModelDB
      **/
     public function delete()
     {
-        $query = "DELETE FROM " . self::$tablename . " WHERE id = ?";
+        $query = "DELETE FROM " . get_called_class()::$tablename . " WHERE id = :id;";
         $conn = Connection::getConnection()->getPDO();
-        if (!$conn->prepare($query)->execute($this->id)) {
-            throw new RuntimeException("Cannot delete data");
+        if (!$conn->prepare($query)->execute([':id' => $this->id])) {
+            throw new RuntimeException("Cannot delete data", 404);
         }
     }
 }
