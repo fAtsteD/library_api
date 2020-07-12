@@ -8,20 +8,6 @@ namespace App\Controllers;
 abstract class ApiController
 {
     /**
-     * Uri
-     *
-     * @var array
-     */
-    protected $requestUri = [];
-
-    /**
-     * Params for action
-     *
-     * @var array
-     */
-    protected $requestParams = [];
-
-    /**
      * Code of response status
      *
      * @var int
