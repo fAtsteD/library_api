@@ -56,7 +56,7 @@ class BookController extends ApiController
             'status' => 'success',
             'id' => $book->getId(),
             'name' => $book->getName(),
-            'edition' => $book->getEdition()->getName(),
+            'edition' => is_null($book->getEdition()) ? '' : $book->getEdition()->getName(),
             'authors' => $authors,
         ], 200);
     }
@@ -69,6 +69,10 @@ class BookController extends ApiController
     {
         if (!(isset(App::$requestParams['name']) && isset(App::$requestParams['edition']) && isset(App::$requestParams['authors']))) {
             throw new RuntimeException("Wrong params", 404);
+        }
+
+        if (!is_null(Book::findByName(App::$requestParams['name']))) {
+            throw new RuntimeException("Book exists", 404);
         }
 
         $book = new Book();
@@ -88,7 +92,7 @@ class BookController extends ApiController
 
         // Set authors, create them if they do not exist
         $authors = [];
-        foreach (App::$requestParams['authors'] as $authorName) {
+        foreach (explode(',', App::$requestParams['authors']) as $authorName) {
             $author = Author::findByName($authorName);
 
             if (is_null($author)) {
@@ -101,6 +105,8 @@ class BookController extends ApiController
         }
 
         $book->setAuthors($authors);
+
+        $book->save();
 
         return $this->response(['status' => 'success'], 200);
     }
@@ -155,6 +161,8 @@ class BookController extends ApiController
             $book->setAuthors($authors);
         }
 
+        $book->save();
+
         return $this->response(['status' => 'success'], 200);
     }
 
@@ -178,12 +186,10 @@ class BookController extends ApiController
      */
     private function isExistBook()
     {
-        if (isset(App::$requestParams['id'])) {
-            $book = Book::findById(App::$requestParams['id']);
-        } elseif (isset(App::$requestParams['name'])) {
-            $book = Book::findById(App::$requestParams['name']);
-        }
-        else {
+        $id = parse_url(App::$requestUri[0])['path'];
+        if (is_numeric($id)) {
+            $book = Book::findById(intval($id));
+        } else {
             throw new RuntimeException("Wrong params", 404);
         }
 

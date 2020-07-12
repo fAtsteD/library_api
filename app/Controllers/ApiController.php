@@ -8,13 +8,6 @@ namespace App\Controllers;
 abstract class ApiController
 {
     /**
-     * Code of response status
-     *
-     * @var int
-     */
-    protected $statusCode = 500;
-
-    /**
      * Response for request
      *
      * @param array $data
@@ -33,7 +26,7 @@ abstract class ApiController
      * @param int $code
      * @return string
      */
-    private function getStatus()
+    private function getStatus($statusCode)
     {
         $status = array(
             200 => 'OK',
@@ -41,7 +34,7 @@ abstract class ApiController
             405 => 'Method Not Allowed',
             500 => 'Internal Server Error',
         );
-        return $status[$this->statusCode];
+        return $status[$statusCode];
     }
 
     /**
