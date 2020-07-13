@@ -56,9 +56,7 @@ class Edition extends ModelDB
     }
 
     /**
-     * Save data to db
-     *
-     * @return void
+     * @inheritDoc
      **/
     public function save()
     {
@@ -80,9 +78,7 @@ class Edition extends ModelDB
     }
 
     /**
-     * Find in db all editions
-     *
-     * @return array
+     * @inheritDoc
      */
     static public function findAll()
     {
@@ -110,9 +106,7 @@ class Edition extends ModelDB
     }
 
     /**
-     * Find in db edition by id
-     *
-     * @param int $id
+     * @inheritDoc
      * @return Edition|null
      */
     static public function findById($id)

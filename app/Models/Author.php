@@ -56,9 +56,7 @@ class Author extends ModelDB
     }
 
     /**
-     * Save data to db
-     *
-     * @return void
+     * @inheritDoc
      **/
     public function save()
     {
@@ -94,9 +92,7 @@ class Author extends ModelDB
     }
 
     /**
-     * Find in db all authors
-     *
-     * @return array
+     * 2@inheritDoc
      */
     static public function findAll()
     {
@@ -124,9 +120,7 @@ class Author extends ModelDB
     }
 
     /**
-     * Find in db author by id
-     *
-     * @param int $id
+     * @inheritDoc
      * @return Author|null
      */
     static public function findById($id)

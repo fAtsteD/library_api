@@ -135,9 +135,7 @@ class Book extends ModelDB
     }
 
     /**
-     * Save data to db
-     *
-     * @return void
+     * @inheritDoc
      **/
     public function save()
     {
@@ -178,11 +176,9 @@ class Book extends ModelDB
     }
 
     /**
-     * Find in db all books
-     *
-     * @return array
+     * @inheritDoc
      */
-    static public function findAll()
+    public static function findAll()
     {
         $query = "SELECT * FROM " . self::$tablename . ";";
         $conn = Connection::getConnection()->getPDO();
@@ -224,9 +220,7 @@ class Book extends ModelDB
     }
 
     /**
-     * Find in db book by id
-     *
-     * @param int $id
+     * @inheritDoc
      * @return Book|null
      */
     static public function findById($id)

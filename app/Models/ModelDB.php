@@ -37,4 +37,26 @@ abstract class ModelDB
             throw new RuntimeException("Cannot delete data", 404);
         }
     }
+
+    /**
+     * Save data to db
+     *
+     * @return void
+     **/
+    public abstract function save();
+
+    /**
+     * Find in db all entities
+     *
+     * @return array
+     */
+    public abstract static function findAll();
+
+    /**
+     * Find in db entity by id
+     *
+     * @param int $id
+     * @return ModelDB|null
+     */
+    public abstract static function findById(int $id);
 }
