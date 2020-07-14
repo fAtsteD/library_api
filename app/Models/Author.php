@@ -25,16 +25,6 @@ class Author extends ModelDB
     protected $name = '';
 
     /**
-     * Return id of author
-     *
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
      * Return name of author
      *
      * @return string

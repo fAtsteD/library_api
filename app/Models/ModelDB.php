@@ -25,6 +25,16 @@ abstract class ModelDB
     protected $id = 0;
 
     /**
+     * Return id
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
      * Delete data from db
      * 
      * @return void

@@ -25,16 +25,6 @@ class Edition extends ModelDB
     protected $name = '';
 
     /**
-     * Return id of edition
-     *
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
      * Return name of edition
      *
      * @return string

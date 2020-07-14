@@ -46,16 +46,6 @@ class Book extends ModelDB
     public static $tablenameBookAuthor = 'book_author';
 
     /**
-     * Return id of book
-     *
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
      * Return name of book
      *
      * @return string
