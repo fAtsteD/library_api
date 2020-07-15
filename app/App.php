@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Auth\Authentication;
 use Exception;
 use RuntimeException;
 
@@ -23,6 +24,13 @@ class App
      * @var array
      */
     public static $requestParams = [];
+
+    /**
+     * Object of auth
+     *
+     * @var Authentication
+     */
+    public static $auth = null;
 
     /**
      * Action that has to be used
@@ -49,11 +57,8 @@ class App
         header("Access-Control-Allow-Methods: *");
         header("Content-Type: application/json");
 
-        // Set called class for uri
-        //$controllerName = strtolower(substr(get_called_class($this), 0, -10));
-
         // Parse Uri
-        self::$requestUri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+        self::$requestUri = $this->getRequestUriPath();
         self::$requestParams = $_REQUEST;
 
         // Define method of request
@@ -63,11 +68,13 @@ class App
                 $this->method = 'DELETE';
             } else if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT') {
                 $this->method = 'PUT';
-            }
-            else {
+            } else {
                 throw new Exception("Unexpected Header", 404);
             }
         }
+
+        // Authenticate user
+        self::$auth = new Authentication();
     }
 
     /**
@@ -142,5 +149,16 @@ class App
         }
 
         return null;
+    }
+
+    /**
+     * Parse url and return array of path
+     *
+     * @return array
+     */
+    private function getRequestUriPath()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI']);
+        return explode('/', trim($uri['path'], '/'));
     }
 }
