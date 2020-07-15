@@ -37,13 +37,23 @@ CREATE TABLE edition (
     UNIQUE(name)
 );
 
+-- Table user
+CREATE TABLE user (
+    id INT UNSIGNED AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(32) NOT NULL,
+    token VARCHAR(32) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE(username)
+);
+
 -- Test data
--- Editions
+-- Edition
 INSERT INTO edition(id, name) VALUES
 (1, 'Upper Saddle River'),
 (2, 'Addison-Wesley, Addison Wesley longman, Inc.'),
 (3, 'Farnham');
--- Authors
+-- Author
 INSERT INTO author(id, name) VALUES
 (1, 'Stuart Jonathan Russell'),
 (2, 'Peter Norvig'),
@@ -51,7 +61,7 @@ INSERT INTO author(id, name) VALUES
 (4, 'Martin Fowler'),
 (5, 'Kent Beck'),
 (6, 'Douglas Crockford');
--- Books
+-- Book
 INSERT INTO book(id, name, edition_id) VALUES
 (1, 'Artificial intelligence : a modern approach', 1),
 (2, 'Clean code : a handbook of agile software craftsmanship', 1),
@@ -65,3 +75,7 @@ INSERT INTO book_author(book_id, author_id) VALUES
 (3, 4),
 (3, 5),
 (4, 6);
+-- User
+INSERT INTO user(id, username, password, token) VALUES
+(1, 'user1', 'd8578edf8458ce06fbc5bb76a58c5ca4', 'daf6ac9c332d3db3bc4b24c3049ed535'),
+(2, 'user2', '5f4dcc3b5aa765d61d8327deb882cf99', '1093dacfb25c99423e40159f3ad42e77');

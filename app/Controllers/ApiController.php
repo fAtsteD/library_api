@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\App;
+
 /**
  * Abstract class for API
  */
@@ -17,6 +19,12 @@ abstract class ApiController
     protected function response(array $data, int $statusCode)
     {
         header('HTTP/1.1 ' . $statusCode . " " . $this->getStatus($statusCode));
+
+        // Add username to response if user is authenticated
+        if (!App::$auth->isGuest()) {
+            $data['user'] = App::$auth->getUser()->getUsername();
+        }
+
         return json_encode($data);
     }
 
